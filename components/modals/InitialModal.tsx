@@ -8,6 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
 import FileUpload from "../FileUpload";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -19,8 +21,8 @@ const formSchema = z.object({
 });
 
 const InitialModal = () => {
+  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
@@ -32,7 +34,15 @@ const InitialModal = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      await axios.post("/api/servers", values);
+
+      form.reset();
+      router.refresh();
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
