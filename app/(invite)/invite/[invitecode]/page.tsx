@@ -43,7 +43,7 @@ const InviteCode = async ({ params }: Props) => {
     },
   });
 
-  if (server) return redirect(`/server/${server.id}`);
+  if (server) return redirect(`/servers/${server.id}`);
 
   return null;
 };
