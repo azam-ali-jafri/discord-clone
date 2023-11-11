@@ -1,3 +1,4 @@
+import ChatInput from "@/components/chat/ChatInput";
 import ChatHeader from "@/components/chat/ChatHeader";
 import { currentProfile } from "@/lib/currentProfile";
 import { db } from "@/lib/db";
@@ -26,8 +27,18 @@ const ChannelPage = async ({ params }: { params: { serverId: string; channelId: 
   if (!channel || !member) return redirect("/");
 
   return (
-    <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
+    <div className="bg-white dark:bg-[#313338] flex flex-col h-screen">
       <ChatHeader serverId={params.serverId} name={channel.name} type="channel" />
+      <div className="flex-1">mssges</div>
+      <ChatInput
+        name={channel.name}
+        type="channel"
+        apiUrl="/api/socket/messages"
+        query={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
+      />
     </div>
   );
 };
