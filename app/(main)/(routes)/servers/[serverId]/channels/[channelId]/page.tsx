@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import React from "react";
+import ChatMessages from "@/components/chat/ChatMessages";
 
 const ChannelPage = async ({ params }: { params: { serverId: string; channelId: string } }) => {
   const profile = await currentProfile();
@@ -29,7 +30,20 @@ const ChannelPage = async ({ params }: { params: { serverId: string; channelId: 
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-screen">
       <ChatHeader serverId={params.serverId} name={channel.name} type="channel" />
-      <div className="flex-1">mssges</div>
+      <ChatMessages
+        member={member}
+        name={channel.name}
+        type="channel"
+        apiUrl="/api/messages"
+        socketUrl="/api/socket/messages"
+        socketQuery={{
+          channelId: channel.id,
+          serverId: channel.serverId,
+        }}
+        paramKey="channelId"
+        paramValue={channel.id}
+        chatId={channel.id}
+      />
       <ChatInput
         name={channel.name}
         type="channel"

@@ -11,6 +11,7 @@ import { Input } from "../ui/Input";
 import axios from "axios";
 import qs from "query-string";
 import { useModal } from "@/hooks/useModal";
+import { useRouter } from "next/navigation";
 
 interface Props {
   apiUrl: string;
@@ -25,6 +26,8 @@ const formSchema = z.object({
 
 const ChatInput = ({ apiUrl, query, name, type }: Props) => {
   const { onOpen } = useModal();
+
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,6 +45,9 @@ const ChatInput = ({ apiUrl, query, name, type }: Props) => {
         query,
       });
       await axios.post(url, values);
+
+      form.reset();
+      router.refresh();
     } catch (error) {
       console.log(error);
     }
